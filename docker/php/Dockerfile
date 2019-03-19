@@ -31,6 +31,18 @@ RUN apt-get install -y libzip-dev zip \
 # Install COMPOSER
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+RUN apt-get -y install libmemcached11 libmemcachedutil2 libmemcached-dev \
+    && cd /usr/local/share \
+    && git clone --branch php7 https://github.com/php-memcached-dev/php-memcached \
+    && cd php-memcached \
+    && phpize \
+    && ./configure \
+    && make \
+    && echo "extension=/usr/local/share/php-memcached/modules/memcached.so" > /usr/local/etc/php/conf.d/memcached.ini
+
+ARG dd_deb_url=https://github.com/DataDog/dd-trace-php/releases/download/0.13.1/datadog-php-tracer_0.13.1-beta_amd64.deb
+# RUN curl -L -o ddtrace.deb ${dd_deb_url} && dpkg -i ddtrace.deb && rm ddtrace.deb
+
 # Set PROJECT USER
 RUN useradd -ms /bin/bash project
 USER project
