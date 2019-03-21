@@ -3,11 +3,15 @@ version: '3'
 services:
 
     php:
-        build: docker/php
+        build:
+            context: "./"
+            dockerfile: docker/php/Dockerfile
+        image: datadog/docker-library:dd_trace_php_symfony_real_world_app_71
         volumes:
-            - "./:/project:cached"
+            - "./:/project_mounted:cached"
         depends_on:
             - mysql
+            - ddagent
 
     nginx:
         build: docker/nginx
@@ -30,3 +34,26 @@ services:
             - "./:/project"
         depends_on:
             - nginx
+
+    ddagent:
+        image: datadog/agent
+        healthcheck:
+            test: ["CMD", "curl", "-f", "-X", "HEAD", "http://localhost:8126"]
+            interval: 10s
+            timeout: 2s
+            retries: 2
+        links:
+            - mysql
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
+            - /proc/:/host/proc/
+        environment:
+            - DD_APM_ENABLED=true
+            - DD_PROCESS_AGENT_ENABLED=true
+            - DD_BIND_HOST=0.0.0.0
+            - DD_API_KEY=5fa68aae23e4822d6f778f8d163f85e8
+        ports:
+            - "8126:8126"
+        expose:
+            - 8126

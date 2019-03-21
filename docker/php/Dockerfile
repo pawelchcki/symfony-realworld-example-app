@@ -1,4 +1,5 @@
-FROM php:7.2-fpm
+ARG PHP_VERSION=7.1
+FROM php:${PHP_VERSION}-fpm
 
 RUN apt-get update \
     && apt-get install -y git curl wget unzip
@@ -40,13 +41,22 @@ RUN apt-get -y install libmemcached11 libmemcachedutil2 libmemcached-dev \
     && make \
     && echo "extension=/usr/local/share/php-memcached/modules/memcached.so" > /usr/local/etc/php/conf.d/memcached.ini
 
-ARG dd_deb_url=https://github.com/DataDog/dd-trace-php/releases/download/0.13.1/datadog-php-tracer_0.13.1-beta_amd64.deb
-# RUN curl -L -o ddtrace.deb ${dd_deb_url} && dpkg -i ddtrace.deb && rm ddtrace.deb
 
 # Set PROJECT USER
 RUN useradd -ms /bin/bash project
-USER project
 WORKDIR /project
+RUN set -xe; apt-get update; apt-get install -y sudo; echo 'project ALL=NOPASSWD: ALL' >> /etc/sudoers.d/50-project
 
-COPY conf/php-fpm.conf /etc/php-fpm.conf
-COPY conf/php.ini /usr/local/etc/php/conf.d/100-php.ini
+ARG DIR_PREFIX=docker/php
+
+# COPY --chown=project:project ./ /project
+COPY ${DIR_PREFIX}/conf/php-fpm.conf /etc/php-fpm.conf
+COPY ${DIR_PREFIX}/conf/php.ini /usr/local/etc/php/conf.d/100-php.ini
+COPY ${DIR_PREFIX}/dd_install_or_not.sh /usr/local/bin/dd_install_or_not.sh
+RUN chmod +x /usr/local/bin/dd_install_or_not.sh
+
+USER project
+
+ENTRYPOINT [ "dd_install_or_not.sh" ]
+CMD [ "php-fpm" ]
+
