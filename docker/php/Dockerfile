@@ -49,7 +49,7 @@ RUN set -xe; apt-get update; apt-get install -y sudo; echo 'project ALL=NOPASSWD
 
 ARG DIR_PREFIX=docker/php
 
-# COPY --chown=project:project ./ /project
+COPY --chown=project:project ./ /project
 COPY ${DIR_PREFIX}/conf/php-fpm.conf /etc/php-fpm.conf
 COPY ${DIR_PREFIX}/conf/php.ini /usr/local/etc/php/conf.d/100-php.ini
 COPY ${DIR_PREFIX}/dd_install_or_not.sh /usr/local/bin/dd_install_or_not.sh

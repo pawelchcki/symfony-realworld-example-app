@@ -7,47 +7,75 @@ services:
             context: "./"
             dockerfile: docker/php/Dockerfile
         image: datadog/docker-library:dd_trace_php_symfony_real_world_app_71
+        labels:
+            kompose.image-pull-policy: Always
+        links:
+            - mysql
+            - memcache
         volumes:
             - "./:/project_mounted:cached"
         depends_on:
             - mysql
             - ddagent
+        ports:
+            - "9000:9000"
+        expose:
+            - 9000
 
     nginx:
-        build: docker/nginx
-        volumes:
-            - "./:/project:cached"
+        build:
+            context: "./"
+            dockerfile: docker/nginx/Dockerfile
+        image: datadog/docker-library:dd_trace_nginx_symfony_real_world_app
+        labels:
+            kompose.image-pull-policy: Always
         depends_on:
             - php
+        links:
+            - php
+        ports:
+            - "80:80"
+        expose:
+            - 80
 
     mysql:
         build: docker/mysql
+        image: datadog/docker-library:dd_trace_mysql_symfony_real_world_app
         environment:
             - "MYSQL_ROOT_PASSWORD=root"
             - "MYSQL_USER=project"
             - "MYSQL_PASSWORD=project"
             - "MYSQL_DATABASE=project"
+        ports:
+            - "3306:3306"
+        expose:
+            - 3306
 
     node:
-        build: docker/node
-        volumes:
-            - "./:/project"
+        build:
+            context: "./"
+            dockerfile: docker/node/Dockerfile
+        labels:
+            kompose.image-pull-policy: Always
+        image: datadog/docker-library:dd_trace_node_symfony_real_world_app
         depends_on:
             - nginx
 
+    memcache:
+        image: memcached:alpine
     ddagent:
         image: datadog/agent
-        healthcheck:
-            test: ["CMD", "curl", "-f", "-X", "HEAD", "http://localhost:8126"]
-            interval: 10s
-            timeout: 2s
-            retries: 2
+        # healthcheck:
+        #     test: ["CMD", "curl", "-f", "-X", "HEAD", "http://localhost:8126"]
+        #     interval: 10s
+        #     timeout: 2s
+        #     retries: 2
         links:
             - mysql
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-            - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
-            - /proc/:/host/proc/
+        # volumes:
+        #     - /var/run/docker.sock:/var/run/docker.sock
+        #     - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
+        #     - /proc/:/host/proc/
         environment:
             - DD_APM_ENABLED=true
             - DD_PROCESS_AGENT_ENABLED=true
