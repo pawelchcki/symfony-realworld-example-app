@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose -v convert -c
+    kompose.image-pull-policy: Always
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: php
+  name: php
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: php
+    spec:
+      containers:
+      - image: datadog/docker-library:dd_trace_php_symfony_real_world_app_71
+        imagePullPolicy: Always
+        env:
+          - name: DDTRACE_DEB_URL
+            value: https://github.com/DataDog/dd-trace-php/releases/download/0.16.1/datadog-php-tracer_0.16.1_amd64.deb
+        name: php
+        ports:
+        - containerPort: 9000
+        resources: {}
+        volumeMounts:
+        - mountPath: /project_mounted
+          name: php-claim0
+      restartPolicy: Always
+      volumes:
+      - name: php-claim0
+        persistentVolumeClaim:
+          claimName: php-claim0
+status: {}

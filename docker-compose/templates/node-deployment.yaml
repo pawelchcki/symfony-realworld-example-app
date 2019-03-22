@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose -v convert -c
+    kompose.image-pull-policy: Always
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: node
+  name: node
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: node
+    spec:
+      containers:
+      - image: datadog/docker-library:dd_trace_node_symfony_real_world_app
+        imagePullPolicy: Always
+        name: node
+        resources: {}
+      restartPolicy: Always
+status: {}

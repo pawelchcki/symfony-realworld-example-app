@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -v convert -c
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ddagent
+  name: ddagent
+spec:
+  ports:
+  - name: "8126"
+    port: 8126
+    targetPort: 8126
+  selector:
+    io.kompose.service: ddagent
+status:
+  loadBalancer: {}

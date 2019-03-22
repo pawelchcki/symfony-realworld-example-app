@@ -12,4 +12,4 @@ RUN chown -R project:project /project
 USER project
 WORKDIR /project
 
-CMD ls -la
+CMD bash ./spec/api-spec-test-runner.sh

@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose -v convert -c
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ddagent
+  name: ddagent
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ddagent
+    spec:
+      containers:
+      - env:
+        - name: DD_API_KEY
+          value: 5fa68aae23e4822d6f778f8d163f85e8
+        - name: DD_APM_ENABLED
+          value: "true"
+        - name: DD_BIND_HOST
+          value: 0.0.0.0
+        - name: DD_PROCESS_AGENT_ENABLED
+          value: "true"
+        image: datadog/agent
+        name: ddagent
+        ports:
+        - containerPort: 8126
+        resources: {}
+      restartPolicy: Always
+status: {}
