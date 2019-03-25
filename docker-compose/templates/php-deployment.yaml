@@ -24,7 +24,7 @@ spec:
         imagePullPolicy: Always
         env:
           - name: DDTRACE_DEB_URL
-            value: https://github.com/DataDog/dd-trace-php/releases/download/0.16.1/datadog-php-tracer_0.16.1_amd64.deb
+            value: https://github.com/DataDog/dd-trace-php/releases/download/0.15.1/datadog-php-tracer_0.15.1_amd64.deb
         name: php
         ports:
         - containerPort: 9000
