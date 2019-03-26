@@ -39,7 +39,7 @@ spec:
       restartPolicy: Always
       volumes:
       - configMap:
-          defaultMode: 420
+          defaultMode: 0644
           name: ddtrace-php-ini
           items:
           - key: configs-ddtrace.ini
