@@ -47,7 +47,7 @@ spec:
         - name: DD_AGENT_HOST
           value: ddagent
         - name: DATABASE_URL
-          value: mysql://project:project@localhost:3306/project
+          value: mysql://project:project@127.0.0.1:3306/project
         image: datadog/docker-library:dd_trace_php_symfony_real_world_app_71
         imagePullPolicy: Always
         ports:
