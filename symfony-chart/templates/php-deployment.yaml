@@ -11,8 +11,7 @@ metadata:
   name: php
 spec:
   replicas: 1
-  strategy:
-    type: Recreate
+  strategy: {}
   template:
     metadata:
       creationTimestamp: null
@@ -20,21 +19,27 @@ spec:
         io.kompose.service: php
     spec:
       containers:
-      - image: datadog/docker-library:dd_trace_php_symfony_real_world_app_71
+      - env:
+        - name: DDTRACE_DEB_URL
+        - name: DD_AGENT_HOST
+          value: ddagent
+        image: datadog/docker-library:dd_trace_php_symfony_real_world_app_71
         imagePullPolicy: Always
-        env:
-          - name: DDTRACE_DEB_URL
-            value: https://github.com/DataDog/dd-trace-php/releases/download/0.15.1/datadog-php-tracer_0.15.1_amd64.deb
         name: php
         ports:
         - containerPort: 9000
         resources: {}
         volumeMounts:
-        - mountPath: /project_mounted
-          name: php-claim0
+        - mountPath: /usr/local/etc/php/conf.d/99-ddtrace.ini
+          subPath: 99-ddtrace.ini
+          name: ddtrace-php-ini
       restartPolicy: Always
       volumes:
-      - name: php-claim0
-        persistentVolumeClaim:
-          claimName: php-claim0
+      - configMap:
+          defaultMode: 420
+          name: ddtrace-php-ini
+          items:
+          - key: configs-ddtrace.ini
+            path: 99-ddtrace.ini
+        name: ddtrace-php-ini
 status: {}

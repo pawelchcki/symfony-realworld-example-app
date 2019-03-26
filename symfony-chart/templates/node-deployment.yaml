@@ -10,7 +10,7 @@ metadata:
     io.kompose.service: node
   name: node
 spec:
-  replicas: 1
+  replicas: 2
   strategy: {}
   template:
     metadata:

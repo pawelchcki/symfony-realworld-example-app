@@ -1,4 +1,8 @@
-version: '3'
+version: '3.3'
+
+configs:
+  ddtrace-php-ini:
+    file: configs-ddtrace.ini
 
 services:
     php:
@@ -9,12 +13,11 @@ services:
         labels:
             kompose.image-pull-policy: Always
         environment:
-            - DD_AGENT_HOST=ddagent
+            - "DD_AGENT_HOST=ddagent"
+            - "DDTRACE_DEB_URL="
         links:
             - mysql
             - memcache
-        volumes:
-            - "./:/project_mounted:cached"
         depends_on:
             - mysql
             - ddagent
@@ -22,7 +25,10 @@ services:
             - "9000:9000"
         expose:
             - 9000
-
+        configs:
+            - source: ddtrace-php-ini
+              target: /usr/local/etc/php/conf.d/99-ddtrace.ini
+              mode: 0644
     nginx:
         build:
             context: "./"
@@ -61,6 +67,8 @@ services:
         image: datadog/docker-library:dd_trace_node_symfony_real_world_app
         depends_on:
             - nginx
+        deploy:
+            replicas: 2
 
     memcache:
         image: memcached:alpine
