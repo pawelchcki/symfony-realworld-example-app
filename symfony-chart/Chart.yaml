@@ -1,7 +1,8 @@
-name: docker-compose
-description: A generated Helm Chart for docker-compose from Skippbox Kompose
-version: 0.0.1
+name: symfony-real-world-app
+description: A generated Helm Chart for docker-compose from Skippbox Kompose + manual modifications (see all changes kompose -v convert -c; diff -ruP docker-compose/ symfony-chart/)
+version: 0.0.2
 keywords:
   - docker-compose
+  - symfony-realworld-app
 sources:
 home:

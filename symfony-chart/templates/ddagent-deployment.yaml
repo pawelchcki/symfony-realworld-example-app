@@ -20,7 +20,7 @@ spec:
       containers:
       - env:
         - name: DD_API_KEY
-          value: 5fa68aae23e4822d6f778f8d163f85e8
+          value: {{ .Values.dd_api_key }}
         - name: DD_APM_ENABLED
           value: "true"
         - name: DD_BIND_HOST

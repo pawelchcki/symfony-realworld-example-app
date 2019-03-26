@@ -21,6 +21,9 @@ spec:
       containers:
       - env:
         - name: DDTRACE_DEB_URL
+          value: {{ .Values.deb_url }}
+        - name: DD_TRACE_GLOBAL_TAGS
+          value: kube_namespace:{{ .Release.Namespace }}{{ if .Values.global_tags }},{{ .Values.global_tags }}{{ end }}
         - name: DD_AGENT_HOST
           value: ddagent
         image: datadog/docker-library:dd_trace_php_symfony_real_world_app_71
