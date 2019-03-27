@@ -10,7 +10,7 @@ metadata:
     io.kompose.service: php
   name: php
 spec:
-  replicas: 1
+  replicas: 3
   strategy: {}
   template:
     metadata:

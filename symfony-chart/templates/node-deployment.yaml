@@ -10,7 +10,7 @@ metadata:
     io.kompose.service: node
   name: node
 spec:
-  replicas: 2
+  replicas: 8
   strategy: {}
   template:
     metadata:
@@ -22,6 +22,8 @@ spec:
       - image: datadog/docker-library:dd_trace_node_symfony_real_world_app
         imagePullPolicy: Always
         name: node
-        resources: {}
+        resources:
+          limits:
+            cpu: "50m"
       restartPolicy: Always
 status: {}
