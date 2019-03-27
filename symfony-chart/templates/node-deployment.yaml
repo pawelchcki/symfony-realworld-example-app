@@ -24,6 +24,7 @@ spec:
         name: node
         resources:
           limits:
+            memory: "400M"
             cpu: "50m"
       restartPolicy: Always
 status: {}
