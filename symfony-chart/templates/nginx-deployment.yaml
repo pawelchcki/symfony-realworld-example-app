@@ -19,7 +19,7 @@ spec:
         io.kompose.service: nginx
     spec:
       containers:
-      - image: nginx:1.7.9
+      - image: nginx:1.15.10
         imagePullPolicy: Always
         name: nginx
         ports:
@@ -29,8 +29,7 @@ spec:
         - name: project-dir
           mountPath: "/project"
         - name: nginx-config-volume
-          mountPath: /etc/nginx/nginx.conf
-          subPath: nginx.conf
+          mountPath: /etc/nginx/conf.d/
       restartPolicy: Always
       initContainers:
       - name: install-code
@@ -40,7 +39,7 @@ spec:
         - cp
         - -a
         - -v
-        - /project/
+        - /project/.
         - /target-project/
         volumeMounts:
         - name: project-dir
