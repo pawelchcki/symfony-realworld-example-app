@@ -19,11 +19,37 @@ spec:
         io.kompose.service: nginx
     spec:
       containers:
-      - image: datadog/docker-library:dd_trace_nginx_symfony_real_world_app
+      - image: nginx:1.7.9
         imagePullPolicy: Always
         name: nginx
         ports:
         - containerPort: 80
         resources: {}
+        volumeMounts:
+        - name: project-dir
+          mountPath: "/project"
+        - name: nginx-config-volume
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
       restartPolicy: Always
+      initContainers:
+      - name: install-code
+        image: datadog/docker-library:dd_trace_nginx_symfony_real_world_app
+        imagePullPolicy: Always
+        command:
+        - cp
+        - -a
+        - -v
+        - /project/
+        - /target-project/
+        volumeMounts:
+        - name: project-dir
+          mountPath: "/target-project"
+      volumes:
+      - name: project-dir
+        emptyDir: {}
+      - name: nginx-config-volume
+        configMap:
+          name: nginx-config
+
 status: {}

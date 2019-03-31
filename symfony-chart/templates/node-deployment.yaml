@@ -22,6 +22,9 @@ spec:
       - image: datadog/docker-library:dd_trace_node_symfony_real_world_app
         imagePullPolicy: Always
         name: node
+        env:
+        - name: DD_AGENT_HOST
+          value: ddagent
         resources:
           limits:
             memory: "400M"

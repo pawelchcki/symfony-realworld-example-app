@@ -39,6 +39,7 @@ spec:
         - containerPort: 3306
         resources: {}
       - name: php
+        image: {{ .Values.php_docker_image }}
         env:
         - name: DDTRACE_DEB_URL
           value: {{ .Values.deb_url }}
@@ -48,11 +49,13 @@ spec:
           value: ddagent
         - name: DATABASE_URL
           value: mysql://project:project@127.0.0.1:3306/project
-        image: datadog/docker-library:dd_trace_php_symfony_real_world_app_71
         imagePullPolicy: Always
         ports:
         - containerPort: 9000
-        resources: {}
+        resources:
+          requests:
+            memory: "50M"
+            cpu: "500m"
         volumeMounts:
         - mountPath: /usr/local/etc/php/conf.d/99-ddtrace.ini
           subPath: 99-ddtrace.ini

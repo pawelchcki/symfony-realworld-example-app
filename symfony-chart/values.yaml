@@ -6,3 +6,5 @@ request_init_hook:
 deb_url:
 ## Global tags added to DD_TRACE_GLOBAL_TAGS env variable
 global_tags:
+###
+php_docker_image: datadog/docker-library:dd_trace_php_symfony_real_world_app_71
