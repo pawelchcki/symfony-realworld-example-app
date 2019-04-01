@@ -19,6 +19,31 @@ spec:
         io.kompose.service: php
     spec:
       containers:
+      - image: datadog/docker-library:dd_trace_node_symfony_real_world_app
+        imagePullPolicy: Always
+        name: node
+        env:
+        - name: DD_AGENT_HOST
+          value: ddagent
+        resources:
+          limits:
+            memory: "400M"
+            cpu: "500m"
+        volumeMounts:
+        - mountPath: /project/spec/api-spec-test-runner.sh
+          subPath: api-spec-test-runner.sh
+          name: node-config-volume
+      - image: nginx:1.15.10
+        imagePullPolicy: Always
+        name: nginx
+        ports:
+        - containerPort: 80
+        resources: {}
+        volumeMounts:
+        - name: project-dir
+          mountPath: "/project"
+        - name: nginx-config-volume
+          mountPath: /etc/nginx/conf.d/
       - name: memcache
         image: memcached:alpine
         resources: {}
@@ -61,12 +86,28 @@ spec:
           subPath: 99-ddtrace.ini
           name: ddtrace-php-ini
       restartPolicy: Always
+      initContainers:
+      - name: install-code
+        image: datadog/docker-library:dd_trace_nginx_symfony_real_world_app
+        imagePullPolicy: Always
+        command: [ "cp", "-a", "-v", "/project/.", "/target-project/"]
+        volumeMounts:
+        - name: project-dir
+          mountPath: "/target-project"
       volumes:
-      - configMap:
+      - name: node-config-volume
+        configMap:
+          name: node-config
+      - name: project-dir
+        emptyDir: {}
+      - name: nginx-config-volume
+        configMap:
+          name: nginx-config
+      - name: ddtrace-php-ini
+        configMap:
           defaultMode: 0644
           name: ddtrace-php-ini
           items:
           - key: configs-ddtrace.ini
             path: 99-ddtrace.ini
-        name: ddtrace-php-ini
 status: {}

@@ -9,7 +9,7 @@ services:
         build:
             context: "./"
             dockerfile: docker/php/Dockerfile
-        image: datadog/docker-library:dd_trace_php_symfony_real_world_app_71
+        image: datadog/docker-library:dd_trace_php_symfony_real_world_app_72
         labels:
             kompose.image-pull-policy: Always
         environment:
