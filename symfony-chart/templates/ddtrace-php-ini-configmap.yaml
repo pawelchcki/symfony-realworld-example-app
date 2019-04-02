@@ -1,11 +1,38 @@
-apiVersion: v1
-data:
-  configs-ddtrace.ini:
-    {{if .Values.request_init_hook }}ddtrace.request_init_hook={{ .Values.request_init_hook }}{{end}}
-
 kind: ConfigMap
 metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: php
   name: ddtrace-php-ini
+apiVersion: v1
+data:
+  99-ddtrace.ini:
+    {{if .Values.request_init_hook }}ddtrace.request_init_hook={{ .Values.request_init_hook }}{{end}}
+  php-fpm.conf: |
+    [global]
+
+    error_log = /proc/stderr
+    daemonize = no
+
+    [www]
+
+    ; if we send this to /proc/self/fd/1, it never appears
+    access.log = /proc/stdout
+
+    ; this does the trick for changing the user
+    user = project
+    group = project
+
+    listen = [::]:9000
+
+    pm = static
+    pm.max_children = 10
+    pm.start_servers = 10
+    pm.min_spare_servers = 10
+    pm.max_spare_servers = 10
+    pm.max_requests = 5000
+
+    clear_env = no
+
+    ; Ensure worker stdout and stderr are sent to the main error log.
+    catch_workers_output = yes

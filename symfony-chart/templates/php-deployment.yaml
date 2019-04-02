@@ -21,9 +21,15 @@ spec:
       containers:
       - name: memcache
         image: memcached:alpine
-        resources: {}
         ports:
         - containerPort: 11211
+        resources:
+          limits:
+            memory: "100M"
+            cpu: "100m"
+          requests:
+            memory: "100M"
+            cpu: "100m"
       - name: mysql
         env:
         - name: MYSQL_DATABASE
@@ -37,7 +43,13 @@ spec:
         image: datadog/docker-library:dd_trace_mysql_symfony_real_world_app
         ports:
         - containerPort: 3306
-        resources: {}
+        resources:
+          limits:
+            memory: "300M"
+            cpu: "200m"
+          requests:
+            memory: "300M"
+            cpu: "200m"
       - name: php
         env:
         - name: DDTRACE_DEB_URL
@@ -63,13 +75,13 @@ spec:
         - mountPath: /usr/local/etc/php/conf.d/99-ddtrace.ini
           subPath: 99-ddtrace.ini
           name: ddtrace-php-ini
+        - mountPath: /etc/php-fpm.conf
+          subPath: php-fpm.conf
+          name: ddtrace-php-ini
       restartPolicy: Always
       volumes:
-      - configMap:
+      - name: ddtrace-php-ini
+        configMap:
           defaultMode: 0644
           name: ddtrace-php-ini
-          items:
-          - key: configs-ddtrace.ini
-            path: 99-ddtrace.ini
-        name: ddtrace-php-ini
 status: {}
