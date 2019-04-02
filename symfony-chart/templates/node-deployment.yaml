@@ -19,15 +19,16 @@ spec:
         io.kompose.service: node
     spec:
       containers:
-      - image: ricoli/hey
-        name: hey
-        command: ["hey", "-n", "9000000000", "-c", "10", "-q", "30", "http://nginx/api/articles"]
+      - image: datadog/docker-library:dd_trace_loadtest_real_world_app
+        imagePullPolicy: Always
+        name: loadtest
+        command: ["loadtest", "-c", "10", "--rps", "40", "http://nginx/api/articles"]
         resources:
           limits:
-            memory: "100M"
+            memory: "300M"
             cpu: "200m"
           requests:
-            memory: "100M"
+            memory: "300M"
             cpu: "200m"
       - image: datadog/docker-library:dd_trace_node_symfony_real_world_app
         imagePullPolicy: Always

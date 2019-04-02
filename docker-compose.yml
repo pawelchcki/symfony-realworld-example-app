@@ -94,3 +94,9 @@ services:
             - "8126:8126"
         expose:
             - 8126
+
+    loadtest:
+        build:
+            context: "./"
+            dockerfile: docker/loadtest/Dockerfile
+        image: datadog/docker-library:dd_trace_loadtest_real_world_app
