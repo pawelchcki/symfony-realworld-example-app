@@ -33,6 +33,12 @@ spec:
         name: ddagent
         ports:
         - containerPort: 8126
-        resources: {}
+        resources:
+          limits:
+            memory: "300M"
+            cpu: "500m"
+          requests:
+            memory: "300M"
+            cpu: "500m"
       restartPolicy: Always
 status: {}
