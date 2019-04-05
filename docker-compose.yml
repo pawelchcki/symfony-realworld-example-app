@@ -9,12 +9,13 @@ services:
         build:
             context: "./"
             dockerfile: docker/php/Dockerfile
-        image: datadog/docker-library:dd_trace_php_symfony_real_world_app_71
+        image: datadog/docker-library:dd_trace_php_symfony_real_world_app_71_xdebug
         labels:
             kompose.image-pull-policy: Always
         environment:
             - "DD_AGENT_HOST=ddagent"
-            - "DDTRACE_DEB_URL="
+            - "DDTRACE_DEB_URL=https://github.com/DataDog/dd-trace-php/releases/download/0.17.0/datadog-php-tracer_0.17.0_amd64.deb"
+            # - "DDTRACE_DEB_URL=https://22544-119990860-gh.circle-artifacts.com/0/datadog-php-tracer_0.17.0_amd64.deb"
         links:
             - mysql
             - memcache
@@ -25,6 +26,8 @@ services:
             - "9000:9000"
         expose:
             - 9000
+        volumes:
+        - "./:/project:cached"
         configs:
             - source: ddtrace-php-ini
               target: /usr/local/etc/php/conf.d/99-ddtrace.ini

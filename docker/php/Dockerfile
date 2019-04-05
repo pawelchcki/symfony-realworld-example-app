@@ -41,7 +41,7 @@ RUN apt-get -y install libmemcached11 libmemcachedutil2 libmemcached-dev \
     && make \
     && echo "extension=/usr/local/share/php-memcached/modules/memcached.so" > /usr/local/etc/php/conf.d/memcached.ini
 
-
+RUN yes | pecl install xdebug
 # Set PROJECT USER
 RUN useradd -ms /bin/bash project
 WORKDIR /project
@@ -51,6 +51,7 @@ ARG DIR_PREFIX=docker/php
 
 COPY --chown=project:project ./ /project
 COPY ${DIR_PREFIX}/conf/php-fpm.conf /etc/php-fpm.conf
+RUN echo 1
 COPY ${DIR_PREFIX}/conf/php.ini /usr/local/etc/php/conf.d/100-php.ini
 COPY ${DIR_PREFIX}/dd_install_or_not.sh /usr/local/bin/dd_install_or_not.sh
 RUN chmod +x /usr/local/bin/dd_install_or_not.sh
