@@ -14,8 +14,13 @@ services:
             kompose.image-pull-policy: Always
         environment:
             - "DD_AGENT_HOST=ddagent"
-            - "DDTRACE_DEB_URL=https://github.com/DataDog/dd-trace-php/releases/download/0.17.0/datadog-php-tracer_0.17.0_amd64.deb"
+            # - "DDTRACE_DEB_URL=https://github.com/DataDog/dd-trace-php/releases/download/0.17.0/datadog-php-tracer_0.17.0_amd64.deb"
             # - "DDTRACE_DEB_URL=https://22544-119990860-gh.circle-artifacts.com/0/datadog-php-tracer_0.17.0_amd64.deb"
+            # - "DDTRACE_DEB_URL=https://23824-119990860-gh.circle-artifacts.com/0/datadog-php-tracer_0.18.0_amd64.deb"
+            # - "DDTRACE_DEB_URL=https://24002-119990860-gh.circle-artifacts.com/0/datadog-php-tracer_0.18.0_amd64.deb"
+            # - "DDTRACE_DEB_URL=https://24979-119990860-gh.circle-artifacts.com/0/datadog-php-tracer_0.18.0_amd64.deb"
+            # - "DDTRACE_DEB_URL=https://25047-119990860-gh.circle-artifacts.com/0/datadog-php-tracer_0.18.0_amd64.deb"
+            - "DDTRACE_DEB_URL=https://github.com/DataDog/dd-trace-php/releases/download/0.19.0/datadog-php-tracer_0.19.0_amd64.deb"
         links:
             - mysql
             - memcache

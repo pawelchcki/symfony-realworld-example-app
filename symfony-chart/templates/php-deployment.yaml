@@ -66,11 +66,11 @@ spec:
         - containerPort: 9000
         resources:
           limits:
-            memory: "200M"
-            cpu: "600m"
+            memory: "300M"
+            cpu: "1000m"
           requests:
-            memory: "200M"
-            cpu: "600m"
+            memory: "300M"
+            cpu: "1000m"
         volumeMounts:
         - mountPath: /usr/local/etc/php/conf.d/99-ddtrace.ini
           subPath: 99-ddtrace.ini
