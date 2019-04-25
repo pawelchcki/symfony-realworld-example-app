@@ -1,0 +1,18 @@
+{{if .Values.enable_ingress }}
+apiVersion: v1
+kind: Service
+metadata:
+#   annotations:
+#     cloud.google.com/app-protocols: '{"80":"HTTP2"}'
+  name: nginx-public
+  labels:
+    io.kompose.service: nginx-public
+spec:
+  type: NodePort
+  ports:
+  - name: "80"
+    port: 80
+    targetPort: 80
+  selector:
+    io.kompose.service: nginx
+{{end}}

@@ -52,8 +52,13 @@ spec:
             cpu: "200m"
       - name: php
         env:
+{{ if .Values.deb_url }}
         - name: DDTRACE_DEB_URL
           value: {{ .Values.deb_url }}
+{{ else if .Values.install_version }}
+        - name: DDTRACE_DEB_URL
+          value: https://github.com/DataDog/dd-trace-php/releases/download/{{ .Values.install_version }}/datadog-php-tracer_{{ .Values.install_version }}_amd64.deb
+{{ end }}
         - name: DD_TRACE_GLOBAL_TAGS
           value: kube_namespace:{{ .Release.Namespace }}{{ if .Values.global_tags }},{{ .Values.global_tags }}{{ end }}
         - name: DD_AGENT_HOST

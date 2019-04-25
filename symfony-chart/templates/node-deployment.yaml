@@ -30,6 +30,7 @@ spec:
           requests:
             memory: "300M"
             cpu: "200m"
+{{if .Values.enable_api_test_suite }}
       - image: datadog/docker-library:dd_trace_node_symfony_real_world_app
         imagePullPolicy: Always
         name: node
@@ -43,5 +44,6 @@ spec:
           limits:
             memory: "400M"
             cpu: "10m"
+{{end}}
       restartPolicy: Always
 status: {}

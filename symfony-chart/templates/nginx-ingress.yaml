@@ -1,0 +1,10 @@
+{{if .Values.enable_ingress }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+spec:
+  backend:
+    serviceName: nginx-public
+    servicePort: 80
+{{end}}

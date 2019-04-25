@@ -1,8 +1,14 @@
 ## keep this a secret
-dd_api_key: 5fa68aae23e4822d6f778f8d163f85e8
+dd_api_key:
 ## value of request_init_hook set in 99-ddtrace.ini file
 request_init_hook:
 ## file to fetch and install at the start of container
 deb_url:
+## altenatively use only version and create a url from it based on convention
+install_version:
 ## Global tags added to DD_TRACE_GLOBAL_TAGS env variable
 global_tags:
+## Enables API test suite that runs all tests in perpetuum
+enable_api_test_suite: false
+## Enables public ingress - used for testing
+enable_ingress: true
