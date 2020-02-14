@@ -20,7 +20,9 @@ services:
             # - "DDTRACE_DEB_URL=https://24002-119990860-gh.circle-artifacts.com/0/datadog-php-tracer_0.18.0_amd64.deb"
             # - "DDTRACE_DEB_URL=https://24979-119990860-gh.circle-artifacts.com/0/datadog-php-tracer_0.18.0_amd64.deb"
             # - "DDTRACE_DEB_URL=https://25047-119990860-gh.circle-artifacts.com/0/datadog-php-tracer_0.18.0_amd64.deb"
-            - "DDTRACE_DEB_URL=https://github.com/DataDog/dd-trace-php/releases/download/0.19.1/datadog-php-tracer_0.19.1_amd64.deb"
+            # - "DDTRACE_DEB_URL=https://github.com/DataDog/dd-trace-php/releases/download/0.29.0/datadog-php-tracer_0.29.0_amd64.deb"
+            - "DDTRACE_DEB_URL=https://54411-119990860-gh.circle-artifacts.com/0/datadog-php-tracer_0.30.0_amd64.deb"
+            # - "DD_SAMPLING_RATE=0.5"
         links:
             - mysql
             - memcache
@@ -31,8 +33,8 @@ services:
             - "9000:9000"
         expose:
             - 9000
-        volumes:
-        - "./:/project:cached"
+        # volumes:
+            # - "./:/project:cached"
         configs:
             - source: ddtrace-php-ini
               target: /usr/local/etc/php/conf.d/99-ddtrace.ini
@@ -81,7 +83,7 @@ services:
     memcache:
         image: memcached:alpine
     ddagent:
-        image: datadog/agent
+        image: datadog/agent:6.12.1
         # healthcheck:
         #     test: ["CMD", "curl", "-f", "-X", "HEAD", "http://localhost:8126"]
         #     interval: 10s
@@ -97,13 +99,17 @@ services:
             - DD_APM_ENABLED=true
             - DD_PROCESS_AGENT_ENABLED=true
             - DD_BIND_HOST=0.0.0.0
-            - DD_API_KEY=5fa68aae23e4822d6f778f8d163f85e8
+            - DD_API_KEY=9779170d9bdfb020700635e1852c6ec7
+            - DD_APM_MAX_CPU_PERCENT=1
+            - DD_APM_MAX_MEMORY=120000000
         ports:
             - "8126:8126"
         expose:
             - 8126
 
     loadtest:
+        depends_on:
+            - nginx
         build:
             context: "./"
             dockerfile: docker/loadtest/Dockerfile
